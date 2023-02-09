@@ -43,14 +43,16 @@ class Adherent
     #[ORM\Column(length: 255)]
     private ?string $motPasse = null;
 
-    #[ORM\ManyToMany(targetEntity: Categorie::class, mappedBy: 'adherent')]
-    private Collection $categories;
+    #[ORM\OneToMany(mappedBy: 'adherent', targetEntity: AdherentCategorie::class)]
+    private Collection $adherentCategories;
+
 
 
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->adherentCategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +190,36 @@ class Adherent
     {
         if ($this->categories->removeElement($category)) {
             $category->removeAdherent($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AdherentCategorie>
+     */
+    public function getAdherentCategories(): Collection
+    {
+        return $this->adherentCategories;
+    }
+
+    public function addAdherentCategory(AdherentCategorie $adherentCategory): self
+    {
+        if (!$this->adherentCategories->contains($adherentCategory)) {
+            $this->adherentCategories->add($adherentCategory);
+            $adherentCategory->setAdherent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdherentCategory(AdherentCategorie $adherentCategory): self
+    {
+        if ($this->adherentCategories->removeElement($adherentCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($adherentCategory->getAdherent() === $this) {
+                $adherentCategory->setAdherent(null);
+            }
         }
 
         return $this;

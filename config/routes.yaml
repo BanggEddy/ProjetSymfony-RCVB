@@ -4,3 +4,6 @@
 accueil:
     path : /accueil
     controller: App\Controller\AccueilController::index
+rcvb:
+    path : /rcvb
+    controller: App\Controller\RCVBController::index

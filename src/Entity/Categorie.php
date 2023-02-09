@@ -35,13 +35,16 @@ class Categorie
     #[ORM\ManyToOne]
     private ?Pole $pole = null;
 
-    #[ORM\ManyToMany(targetEntity: Adherent::class, inversedBy: 'categories')]
-    private Collection $adherent;
+    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: AdherentCategorie::class)]
+    private Collection $adherentCategories;
+
+
 
     public function __construct()
     {
         $this->adherent = new ArrayCollection();
         $this->pole = new ArrayCollection();
+        $this->adherentCategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +163,36 @@ class Categorie
     public function setPole(?Pole $pole): self
     {
         $this->pole = $pole;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AdherentCategorie>
+     */
+    public function getAdherentCategories(): Collection
+    {
+        return $this->adherentCategories;
+    }
+
+    public function addAdherentCategory(AdherentCategorie $adherentCategory): self
+    {
+        if (!$this->adherentCategories->contains($adherentCategory)) {
+            $this->adherentCategories->add($adherentCategory);
+            $adherentCategory->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdherentCategory(AdherentCategorie $adherentCategory): self
+    {
+        if ($this->adherentCategories->removeElement($adherentCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($adherentCategory->getCategorie() === $this) {
+                $adherentCategory->setCategorie(null);
+            }
+        }
 
         return $this;
     }

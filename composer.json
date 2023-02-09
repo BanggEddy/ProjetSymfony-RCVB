@@ -15,7 +15,7 @@
         "symfony/dotenv": "5.4.*",
         "symfony/flex": "^1.17|^2",
         "symfony/framework-bundle": "5.4.*",
-        "symfony/maker-bundle": "^1.47",
+        "symfony/maker-bundle": "^1.48",
         "symfony/proxy-manager-bridge": "5.4.*",
         "symfony/requirements-checker": "^2.0",
         "symfony/runtime": "5.4.*",
